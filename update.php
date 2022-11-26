@@ -17,9 +17,9 @@
     
           <ul class="nav nav-pills">
             <li class="nav-item"><a href="index.php" class="nav-link " aria-current="page">Donate</a></li>
-            <li class="nav-item"><a href="info.php" class="nav-link active">Delete</a></li>
+            <li class="nav-item"><a href="info.php" class="nav-link">Delete</a></li>
             <li class="nav-item"><a href="search.php" class="nav-link ">Search</a></li>
-            <li class="nav-item"><a href="update.php" class="nav-link">Update</a></li>
+            <li class="nav-item"><a href="update.php" class="nav-link active">Update</a></li>
           </ul>
         </header>
       </div>
@@ -27,10 +27,11 @@
         <h2 >Donor's Data</h2>
 
         <form action="" method="post">
-          <input type="number" name="delDonor" id="delDonor" placeholder="Donor's Id" class="text-center">
-          <input type="submit" value="Delete" name="del">
+          <input type="number" name="id" id="id" placeholder="Donor's Id" class="text-center">
+          <input type="text" name="region" id="region" placeholder="Update Region" class="text-center">
+          <input type="text" name="phone" placeholder="Update Phone Number" class="text-center">
+          <input type="submit" value="Update" name="submit">
         </form>
-
         </div>
     <div class="DonorsInformation ">
         <table class="table table-striped table-hover text-center mx-auto w-50">
@@ -39,32 +40,55 @@
             <th scope="col">Donor's Id</th>
             <th scope="col">Name</th>
             <th scope="col">Region</th>
+            <th scope="col">Phone Number</th>
             <th scope="col">Blood Group</th>
           </tr>
         </thead>
         <tbody>
             <?php
             include 'config.php';
+            if(isset($_POST['submit'])){
+                $id = $_POST["id"];
+                $region = $_POST["region"];
+                $phone = $_POST["phone"];
+                $query="";
+                $f=0;
+                if(strlen($region)==0  && strlen($phone) != 0)
+                {
+                    $query = " update donorData set phone='$phone' where id='$id'";
+                }
+                else if(strlen($region)!=0  && strlen($phone) == 0)
+                {
+                    $query = " update donorData set region='$region' where id='$id'";
+                }
+                else if(strlen($region)!=0  && strlen($phone) != 0)
+                {
+                    $query = " update donorData set region = '$region', phone='$phone' where id='$id'";
+                }
+                else{
+                    ?>
+                    <script> alert("Empty Data Not Allowed");</script>
+                    <?php
+                    $f=1;
+                }
+                if($f==0)
+                {$executed = mysqli_query( $con, $query );}
+
+            }
             $query="select * from donorData";
             $query=mysqli_query($con,$query);
-            if(mysqli_num_rows($query)<1)
+            while($row=mysqli_fetch_array($query))
             {
-              $startPrimKeyFrom1="alter table donorData AUTO_INCREMENT=1;";
-              mysqli_query($con,$startPrimKeyFrom1);
-            }
-            else{
-              while($row=mysqli_fetch_array($query))
-              {
                 ?>
                  <tr>
-                  <th scope="row"> <?php echo $row['id']; ?> </th>
-                  <td><?php echo $row['name']; ?></td>
+                     <th scope="row"> <?php echo $row['id']; ?> </th>
+                     <td><?php echo $row['name']; ?></td>
                   <td><?php echo $row['region']; ?></td>
+                  <td><?php echo $row['phone']; ?></td>
                   <td><?php echo $row['bloodGroup']; ?></td>
                 </tr>
                 <?php
               }
-            }
 
             ?>
         </table>
@@ -72,32 +96,6 @@
 </body>
 </html>
 <?php
-if(isset($_POST['del']))
-{
-  $delDonorsId=mysqli_real_escape_string($con,$_POST['delDonor']);
-  $query="select * from donorData where id='$delDonorsId'";
-  $query=mysqli_query($con,$query);
-  if(mysqli_num_rows($query)>0)
-  {
-    $delQuery="delete from donorData where id='$delDonorsId'";
-    if(mysqli_query($con,$delQuery))
-    {
-      ?>
-      <script>alert("Data Deleted Successfully!"); location.reload();</script>
-      <?php
-    }
-    else{
-      ?>
-      <script>alert("Something went wrong :( \n Deletion Failed.");</script>
-      <?php
-    }
-  }
-  else{
-    ?>
-      <script>alert("Donor Id not found in Database");</script>
-      <?php
-  }
-}
 mysqli_close($con);
 
 ?>

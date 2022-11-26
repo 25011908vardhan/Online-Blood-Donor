@@ -27,7 +27,9 @@
     
           <ul class="nav nav-pills">
             <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Donate</a></li>
-            <li class="nav-item"><a href="info.php" class="nav-link">Information</a></li>
+            <li class="nav-item"><a href="info.php" class="nav-link">Delete</a></li>
+            <li class="nav-item"><a href="search.php" class="nav-link ">Search</a></li>
+            <li class="nav-item"><a href="update.php" class="nav-link">Update</a></li>
           </ul>
         </header>
       </div>
