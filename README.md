@@ -12,4 +12,4 @@
    - Cloning this repo using `git clone https://github.com/25011908vardhan/Online-Blood-Donor.git` <br>
    OR <br>
    - Downloading and extracting the [zip file](https://github.com/25011908vardhan/Online-Blood-Donor/archive/refs/heads/main.zip)
-6) Now just open your browser and go to http://localhost/<Project_name>/index.php
+6) Now just open your browser and go to localhost/<Project_name>/index.php
